@@ -3,7 +3,7 @@
     <nav id="nav">
       <router-link to="/">Home</router-link>
       |
-      <router-link to="/about">About</router-link>
+      <router-link to="/carousel">About</router-link>
     </nav>
     <main>
       <router-view />
@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type SetupContext } from 'vue';
+import { defineComponent, type SetupContext } from "vue";
 
 /** App Component */
 export default defineComponent({

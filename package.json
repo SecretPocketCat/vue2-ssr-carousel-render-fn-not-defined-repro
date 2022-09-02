@@ -1,107 +1,43 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "vite-vue2-ts-ssr-starter",
-  "private": true,
+  "name": "vue2-ssr-carousel-render-fn-not-defined-repro",
   "version": "0.5.3",
-  "description": "Vue2 SSR TS Starter project for Vite.",
-  "author": {
-    "name": "Logue",
-    "email": "logue@hotmail.co.jp",
-    "url": "https://logue.dev/"
-  },
-  "homepage": "https://github.com/logue/vite-vue2-ts-ssr-starter",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:logue/vite-vue2-ts-ssr-starter.git"
-  },
-  "bugs": {
-    "url": "https://github.com/logue/vite-vue2-ts-ssr-starter/issues"
-  },
   "license": "MIT",
   "engines": {
-    "node": ">=16.16.0",
-    "yarn": ">=1.22.4"
+    "node": ">=16.16.0"
   },
-  "packageManager": "yarn@3.2.1",
   "scripts": {
-    "dev": "NODE_ENV=development node server",
-    "dev:prod": "NODE_ENV=production node server",
-    "clean": "rimraf ./node_modules/.vite",
-    "lint": "eslint . --fix --cache --cache-location ./node_modules/.vite/vite-plugin-eslint && prettier . -w -u",
-    "lint:style": "stylelint \"./**/*.{css,sass,scss,htm,html,vue}\" --fix --cache-location ./node_modules/.vite/vite-plugin-stylelint  && prettier  \"./**/*.{css,sass,scss,htm,html,vue}\" -w -u",
-    "lint:markup": "vue-tsc --noEmit",
-    "build": "vue-tsc --noEmit && npm run build:client && npm run build:server",
-    "build:client": "vue-tsc --noEmit && vite build --outDir dist/client --ssrManifest",
-    "build:server": "vue-tsc --noEmit && vite build --outDir dist/server --ssr src/entry-server.js",
-    "build:analyze": "vue-tsc --noEmit && vite build --outDir dist/client --ssrManifest --mode analyze && vite build --outDir dist/server --ssr src/entry-server.js --mode analyze",
-    "build:clean": "rimraf dist",
-    "preview": "vite preview",
-    "prepare": "husky install"
+    "preview": "run-s clean:dist build dev:prod",
+    "dev": "cross-env NODE_ENV=development node server",
+    "dev:prod": "cross-env NODE_ENV=production node server",
+    "clean:vite": "rimraf ./node_modules/.vite",
+    "clean:dist": "rimraf dist",
+    "build": "run-p build:client build:server",
+    "build:client": "vite build --outDir dist/client --ssrManifest",
+    "build:server": "vite build --outDir dist/server --ssr src/entry-server.js"
   },
   "dependencies": {
-    "@logue/vue2-helpers": "^1.2.4",
     "express": "^4.18.1",
     "serve-static": "^1.15.0",
-    "vue": "^2.7.4",
+    "vue": "2.7.10",
     "vue-class-component": "^7.2.6",
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.5.4",
-    "vue-server-renderer": "^2.7.4",
-    "vuex": "^3.6.2"
+    "vue-server-renderer": "2.7.10",
+    "vue-ssr-carousel": "^1.5.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/node": "^18.0.3",
-    "@types/webfontloader": "^1.6.34",
-    "@typescript-eslint/eslint-plugin": "^5.30.5",
-    "@typescript-eslint/parser": "^5.30.5",
     "@vitejs/plugin-vue2": "^1.1.2",
-    "@vue/eslint-config-prettier": "^7.0.0",
-    "eslint": "^8.19.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-import-resolver-alias": "^1.1.2",
-    "eslint-import-resolver-typescript": "^3.2.4",
-    "eslint-plugin-html": "^6.2.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsdoc": "^39.3.3",
-    "eslint-plugin-json-schema-validator": "^3.1.3",
-    "eslint-plugin-jsonc": "^2.3.1",
-    "eslint-plugin-tsdoc": "^0.2.16",
-    "eslint-plugin-vue": "^9.2.0",
-    "eslint-plugin-vuejs-accessibility": "^1.2.0",
-    "eslint-plugin-yaml": "^0.5.0",
-    "husky": "^8.0.1",
-    "lint-staged": "^13.0.3",
+    "cross-env": "^7.0.3",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8.4.14",
     "postcss-html": "^1.5.0",
     "postcss-scss": "^4.0.4",
     "prettier": "^2.7.1",
-    "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rollup-plugin-visualizer": "^5.6.0",
-    "stylelint": "^14.9.1",
-    "stylelint-config-recommended-scss": "^6.0.0",
-    "stylelint-config-recommended-vue": "^1.4.0",
-    "stylelint-order": "^5.0.0",
     "typescript": "^4.7.4",
-    "vite": "^2.9.14",
-    "vite-plugin-checker": "^0.4.8",
-    "vue-eslint-parser": "^9.0.3",
-    "vue-template-compiler": "^2.7.4",
-    "vue-tsc": "^0.38.3"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.vue": "vue-tsc --noEmit",
-    "*.{js,ts,json,jsonc,json5,yaml,yml,toml,yml,yaml,vue,htm,html,md}": "eslint --fix --cache --cache-location ./node_modules/.vite/vite-plugin-eslint",
-    "*.{css,sass,scss,vue,htm,html}": "stylelint --fix --cache --cache-location ./node_modules/.vite/vite-plugin-stylelint",
-    "*": "prettier -w -u"
-  },
-  "resolutions": {
-    "prettier": "^2.7.1"
+    "vite": "^3.0.9"
   }
 }

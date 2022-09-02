@@ -11,11 +11,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, type Ref, type SetupContext } from 'vue';
-// import { useStore } from '@logue/vue2-helpers/dist/vuex';
-import { useRoute } from '@logue/vue2-helpers/vue-router';
+import { defineComponent, ref, type Ref, type SetupContext } from "vue";
 
-import HelloWorld from '@/components/HelloWorld.vue';
+import HelloWorld from "@/components/HelloWorld.vue";
 
 /** Home Component */
 export default defineComponent({
@@ -25,7 +23,7 @@ export default defineComponent({
   },
   /** Props */
   props: {
-    prop: { type: String, default: 'prop' },
+    prop: { type: String, default: "prop" },
   },
   /**
    * Setup
@@ -34,27 +32,7 @@ export default defineComponent({
    * @param _context - Context
    */
   setup(_props, _context: SetupContext) {
-    /** Route */
-    const route = useRoute();
-    /** Vuex */
-    // const store = useStore();
-
     const data: Ref<string | undefined> = ref();
-
-    /* *
-     * Computed
-     * /
-    const computedValue: Ref<string> = computed({
-      get: () => store.getters.computedValue,
-      set: v => store.dispatch('setComputedValue', v)
-    }
-     */
-
-    // Watch
-    watch(
-      () => route?.name,
-      name => console.log('route is changed:', name)
-    );
 
     return {
       data,

@@ -1,22 +1,21 @@
 /* eslint-disable tsdoc/syntax */
 /* eslint-disable no-undef */
-const fs = require('fs');
-const path = require('path');
-const express = require('express');
-const isProd = process.env.NODE_ENV === 'production';
+const fs = require("fs");
+const path = require("path");
+const express = require("express");
+const isProd = process.env.NODE_ENV === "production";
 
 /**
  * Create Express Server
  */
 async function createServer(root = process.cwd()) {
-  const resolve = p => path.resolve(__dirname, p);
+  const resolve = (p) => path.resolve(__dirname, p);
 
   const indexProd = isProd
-    ? fs.readFileSync(resolve('dist/client/index.html'), 'utf-8')
-    : '';
+    ? fs.readFileSync(resolve("dist/client/index.html"), "utf-8")
+    : "";
   const manifest = isProd
-    ? // @ts-ignore
-      () => import('./dist/client/ssr-manifest.json')
+    ? () => import("./dist/client/ssr-manifest.json")
     : {};
 
   /** @type {import('express').Express} */
@@ -25,11 +24,11 @@ async function createServer(root = process.cwd()) {
   /** @type {import('vite').ViteDevServer} */
   let vite;
   if (!isProd) {
-    vite = await require('vite').createServer({
+    vite = await require("vite").createServer({
       root,
-      logLevel: isProd ? 'error' : 'info',
+      logLevel: isProd ? "error" : "info",
       server: {
-        middlewareMode: 'ssr',
+        middlewareMode: "ssr",
         watch: {
           // During tests we edit the files too fast and sometimes chokidar
           // misses change events, so enforce polling for consistency
@@ -42,13 +41,13 @@ async function createServer(root = process.cwd()) {
     app.use(vite.middlewares);
   } else {
     app.use(
-      require('serve-static')(resolve('dist/client'), {
+      require("serve-static")(resolve("dist/client"), {
         index: false,
       })
     );
   }
 
-  app.use('*', async (req, res) => {
+  app.use("*", async (req, res) => {
     try {
       const url = req.originalUrl;
 
@@ -56,21 +55,19 @@ async function createServer(root = process.cwd()) {
       let render;
       if (!isProd) {
         // always read fresh template in dev
-        template = fs.readFileSync(resolve('index.html'), 'utf-8');
+        template = fs.readFileSync(resolve("index.html"), "utf-8");
         template = await vite.transformIndexHtml(url, template);
-        render = (await vite.ssrLoadModule('/src/entry-server.js')).render;
+        render = (await vite.ssrLoadModule("/src/entry-server.js")).render;
       } else {
         template = indexProd;
-        // @ts-ignore
-        render = require('./dist/server/entry-server.js').render;
+        render = (await import("./dist/server/entry-server.mjs")).render;
       }
 
       const html = await render(url, manifest, template);
 
-      res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
+      res.status(200).set({ "Content-Type": "text/html" }).end(html);
     } catch (e) {
       vite && vite.ssrFixStacktrace(e);
-      console.log(e.stack);
       res.status(500).end(e.stack);
     }
   });
@@ -80,9 +77,6 @@ async function createServer(root = process.cwd()) {
 
 createServer().then(({ app }) =>
   app.listen(3000, () => {
-    console.log('⚡Launch SSR: http://localhost:3000');
+    console.log("⚡Launch SSR: http://localhost:3000");
   })
 );
-
-// for test use
-exports.createServer = createServer;

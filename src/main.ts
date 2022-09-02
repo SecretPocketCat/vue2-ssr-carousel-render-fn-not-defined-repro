@@ -1,16 +1,22 @@
-/** Vue main script */
-import Vue from 'vue';
+import Vue from "vue";
+import VueRouter, { RouterMode } from "vue-router";
 
 Vue.config.productionTip = false;
 
-import App from './App.vue';
-import router from './router';
-import store from './store';
+import App from "./App.vue";
+import { createRouter } from "./router";
 
-const app = new Vue({
-  router,
-  store,
-  render: h => h(App),
-});
+Vue.use(VueRouter);
 
-export { app, router, store };
+export function createApp(mode: RouterMode) {
+  const router = createRouter(mode);
+  const app = new Vue({
+    router,
+    render: (h) => h(App),
+  });
+
+  return {
+    router,
+    app,
+  };
+}

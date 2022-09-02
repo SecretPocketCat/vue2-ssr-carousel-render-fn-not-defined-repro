@@ -1,6 +1,6 @@
 /* eslint-disable tsdoc/syntax */
-import { createRenderer } from 'vue-server-renderer';
-import { app, router, store } from './main';
+import { createRenderer } from "vue-server-renderer";
+import { createApp } from "./main";
 
 /**
  * Render by Server
@@ -11,7 +11,8 @@ import { app, router, store } from './main';
  */
 export function render(url, manifest, template) {
   return new Promise((resolve, reject) => {
-    router.push(url).catch(err => reject(err));
+    const { app, router } = createApp("abstract");
+    router.push(url);
 
     // wait until router has resolved possible async hooks
     router.onReady(() => {
@@ -26,21 +27,19 @@ export function render(url, manifest, template) {
         template,
       });
       const context = {
-        title: import.meta.env.VITE_APP_TITLE || 'Vue APP',
+        title: import.meta.env.VITE_APP_TITLE || "Vue APP",
         meta: `<meta name="description" content="${
           import.meta.env.VITE_APP_DESCRIPTION
         }"/>`,
       };
-      const state = JSON.stringify(store.state);
 
       return renderer
         .renderToString(app, context)
-        .then(vueHtml => {
-          const html = vueHtml.replace(`<!--vuex-state-->`, state);
-          return resolve(html);
+        .then((vueHtml) => {
+          return resolve(vueHtml);
         })
-        .catch(err => {
-          console.error(err);
+        .catch((err) => {
+          reject(err);
         });
     }, reject);
   });

@@ -1,28 +1,23 @@
-/** Vue Router Configure */
-import {
-  createRouter,
-  type Router,
-  type RouteRecordRaw,
-} from '@logue/vue2-helpers/vue-router';
+import VueRouter, { RouterMode } from "vue-router";
+import type { RouteConfigSingleView } from "vue-router/types/router";
 
 /** Router Configure */
-const routes: RouteRecordRaw[] = [
+const routes: RouteConfigSingleView[] = [
   {
-    path: '/',
-    name: 'Home',
-    component: () => import('@/views/HomePage.vue'),
+    path: "/",
+    name: "Home",
+    component: () => import("@/views/HomePage.vue"),
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import('@/views/AboutPage.vue'),
+    path: "/carousel",
+    name: "Carousel",
+    component: () => import("@/views/CarouselPage.vue"),
   },
 ];
 
-const router: Router = createRouter({
-  base: import.meta.env.BASE_URL,
-  mode: 'history', // abstract, hash, history
-  routes,
-});
-
-export default router;
+export function createRouter(mode: RouterMode): VueRouter {
+  return new VueRouter({
+    mode,
+    routes,
+  });
+}
