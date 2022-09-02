@@ -3,7 +3,7 @@
     <nav id="nav">
       <router-link to="/">Home</router-link>
       |
-      <router-link to="/carousel">About</router-link>
+      <router-link to="/carousel">Carousel</router-link>
     </nav>
     <main>
       <router-view />

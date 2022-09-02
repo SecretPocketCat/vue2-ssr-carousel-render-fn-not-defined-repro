@@ -12,7 +12,6 @@ import { defineComponent } from "vue";
 import Carousel from "vue-ssr-carousel";
 import "vue-ssr-carousel/index.css";
 
-/** About Component */
 export default defineComponent({
   components: {
     Carousel,
