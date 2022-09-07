@@ -13,12 +13,10 @@
 import Carousel from "vue-ssr-carousel";
 import "vue-ssr-carousel/index.css";
 
-console.warn(Carousel);
-
 export default {
   name: "About",
   components: {
-    Carousel
-  }
+    Carousel,
+  },
 };
 </script>
