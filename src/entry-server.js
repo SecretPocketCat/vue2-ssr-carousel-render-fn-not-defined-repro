@@ -1,46 +1,33 @@
-/* eslint-disable tsdoc/syntax */
-import { createRenderer } from "vue-server-renderer";
-import { createApp } from "./main";
+// runs on server only
 
-/**
- * Render by Server
- *
- * @param {import('vue-router').RawLocation} url - URL
- * @param {*} manifest - Manifest file.
- * @param {string} template - Template file.
- */
-export function render(url, manifest, template) {
+import { createApp } from './main';
+
+export default (context) => {
+  // since there could potentially be asynchronous route hooks or components,
+  // we will be returning a Promise so that the server can wait until
+  // everything is ready before rendering.
   return new Promise((resolve, reject) => {
-    const { app, router } = createApp("abstract");
-    router.push(url);
+    const { app, router, store } = createApp();
 
-    // wait until router has resolved possible async hooks
+    // set server-side router's location
+    router.push(context.url);
+
+    // wait until router has resolved possible async components and hooks
     router.onReady(() => {
+      // This `rendered` hook is called when the app has finished rendering
+      // After the app is rendered, our store is now
+      // filled with the state from our components.
+      // When we attach the state to the context, and the `template` option
+      // is used for the renderer, the state will automatically be
+      // serialized and injected into the HTML as `window.__INITIAL_STATE__`.
+      context.rendered = () => context.state = store.state;
+      // no matched routes, reject with 404
       const matchedComponents = router.getMatchedComponents();
-      // no matched routes
-      if (!matchedComponents.length) {
-        // eslint-disable-next-line prefer-promise-reject-errors
+      if (matchedComponents.length === 0) {
         return reject({ code: 404 });
       }
-      const renderer = createRenderer({
-        manifest,
-        template,
-      });
-      const context = {
-        title: import.meta.env.VITE_APP_TITLE || "Vue APP",
-        meta: `<meta name="description" content="${
-          import.meta.env.VITE_APP_DESCRIPTION
-        }"/>`,
-      };
-
-      return renderer
-        .renderToString(app, context)
-        .then((vueHtml) => {
-          return resolve(vueHtml);
-        })
-        .catch((err) => {
-          reject(err);
-        });
+      // the Promise should resolve to the app instance so it can be rendered
+      return resolve(app);
     }, reject);
   });
-}
+};

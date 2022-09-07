@@ -1,37 +1,43 @@
 {
-  "$schema": "https://json.schemastore.org/package.json",
-  "name": "vue2-ssr-carousel-render-fn-not-defined-repro",
-  "version": "0.5.3",
-  "license": "MIT",
-  "engines": {
-    "node": ">=16.16.0"
-  },
+  "name": "vue-cli-ssr",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "preview": "run-s clean:dist build dev:prod",
-    "dev": "cross-env NODE_ENV=development node server",
-    "dev:prod": "cross-env NODE_ENV=production node server",
-    "clean:vite": "rimraf ./node_modules/.vite",
-    "clean:dist": "rimraf dist",
-    "build": "run-p build:client build:server",
-    "build:client": "vite build --outDir dist/client --ssrManifest",
-    "build:server": "vite build --outDir dist/server --ssr src/entry-server.js"
+    "preview": "run-s build start",
+    "start": "node -r dotenv/config app.js",
+    "serve": "vue-cli-service serve",
+    "inspect:client": "cross-env VUE_ENV=client vue-cli-service inspect > wp.client.json5",
+    "inspect:server": "cross-env VUE_ENV=server vue-cli-service inspect > wp.server.json5",
+    "prebuild": "rimraf public/{js,css,fonts,img}",
+    "build": "cross-env VUE_ENV=client vue-cli-service build --no-clean && cross-env VUE_ENV=server vue-cli-service build --no-clean",
+    "postbuild": "rimraf public/index.html",
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "express": "^4.18.1",
-    "serve-static": "^1.15.0",
+    "core-js": "^3.10.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "vue": "2.7.10",
-    "vue-router": "^3.5.4",
+    "vue-router": "^3.5.1",
     "vue-server-renderer": "2.7.10",
-    "vue-ssr-carousel": "^1.5.1"
+    "vue-template-compiler": "2.7.10",
+    "vuex": "^3.6.2",
+    "vuex-router-sync": "^5.0.0",
+    "vue-ssr-carousel": "^1.5.1",
+    "webpack-node-externals": "^2.5.0"
   },
   "devDependencies": {
-    "@types/express": "^4.17.13",
-    "@types/node": "^18.0.3",
-    "@vitejs/plugin-vue2": "^1.1.2",
-    "cross-env": "^7.0.3",
-    "npm-run-all": "^4.1.5",
+    "@vue/cli-plugin-babel": "~4.5.18",
+    "@vue/cli-plugin-router": "~4.5.18",
+    "@vue/cli-plugin-vuex": "~4.5.18",
+    "@vue/cli-service": "~4.5.18",
+    "cross-env": "^7.0.0",
     "rimraf": "^3.0.2",
-    "typescript": "^4.7.4",
-    "vite": "^3.0.9"
-  }
+    "npm-run-all": "^4.1.5"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }

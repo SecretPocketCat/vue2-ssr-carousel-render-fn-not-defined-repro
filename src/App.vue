@@ -1,32 +1,12 @@
 <template>
   <div id="app">
-    <nav id="nav">
-      <router-link to="/">Home</router-link>
-      |
-      <router-link to="/carousel">Carousel</router-link>
-    </nav>
-    <main>
-      <router-view />
-    </main>
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link>
+    </div>
+    <router-view/>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, type SetupContext } from "vue";
-
-/** App Component */
-export default defineComponent({
-  /**
-   * Setup
-   *
-   * @param _props - Props
-   * @param _context - Context
-   */
-  setup(_props, _context: SetupContext) {
-    // document.title = import.meta.env.VITE_APP_TITLE || 'Vue APP';
-  },
-});
-</script>
 
 <style>
 #app {

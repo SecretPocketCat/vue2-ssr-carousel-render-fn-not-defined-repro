@@ -1,0 +1,24 @@
+<template>
+  <div>
+    <carousel show-arrows :gutter="15" :feather="15">
+      <div v-for="i in 5" :key="i" style="border: 1px solid darkgrey" class="">
+        {{ i }}
+        <img :src="`https://picsum.photos/id/${1000 + i}/400/300`" />
+      </div>
+    </carousel>
+  </div>
+</template>
+
+<script lang="ts">
+import Carousel from "vue-ssr-carousel";
+import "vue-ssr-carousel/index.css";
+
+console.warn(Carousel);
+
+export default {
+  name: "About",
+  components: {
+    Carousel
+  }
+};
+</script>
