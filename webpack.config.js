@@ -51,12 +51,7 @@ const commonConfig = {
     },
     extensions: [".js", ".ts", ".vue"],
   },
-  plugins: [
-    new VueLoaderPlugin(),
-    new webpack.DefinePlugin({
-      "process.env.VUE_ENV": JSON.stringify("server"),
-    }),
-  ],
+  plugins: [new VueLoaderPlugin()],
 };
 
 /** @type {import('webpack').Configuration} */
